@@ -5,3 +5,4 @@ scikit-learn
 pandas
 numpy
 joblib
+psutil=6.1.1
