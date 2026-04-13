@@ -9,6 +9,13 @@ import mlflow
 
 # 1. Initialize DagsHub & MLflow (Cloud Tracking)
 # This allows the API to pull the model artifact directly from the cloud
+
+token = os.getenv("DAGSHUB_TOKEN", "").strip()
+if token:
+    os.environ["DAGSHUB_TOKEN"] = token
+    os.environ["MLFLOW_TRACKING_USERNAME"] = "AryanBaibaswata"
+    os.environ["MLFLOW_TRACKING_PASSWORD"] = token
+
 dagshub.init(repo_owner='AryanBaibaswata', repo_name='SonicForecast', mlflow=True)
 mlflow.set_tracking_uri("https://dagshub.com/AryanBaibaswata/SonicForecast.mlflow")
 
@@ -53,7 +60,7 @@ class PydanticTrackFeatures(BaseModel):
         populate_by_name = True
 
 @app.get("/health")
-def health_check():
+async def health_check():  # <-- Add 'async' here
     return {
         "status": "ok", 
         "model_source": "DagsHub/MLflow",
